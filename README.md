@@ -21,20 +21,18 @@ python ./dataprep.py --save_path ./data --convert
 
 In addition to the Python dependencies, `wget` and `ffmpeg` must be installed on the system.
 
-#### Training example
-
+### Training examples (NP+Softmax)
+- TAP (Temporal average pooling):
 ```
-python ./trainSpeakerNet.py --model ResNetSE34L --encoder CAP --trainfunc proto --optimizer adam --save_path data/exp1 --batch_size 200 --max_frames 200 --scale 30 --margin 0.3 --train_list /home/joon/voxceleb/train_list.txt --test_list /home/joon/voxceleb/test_list.txt --train_path /home/joon/voxceleb/voxceleb2 --test_path /home/joon/voxceleb/voxceleb1
+CUDA_VISIBLE_DEVICES=0 python trainSpeakerNet.py --model ResNetSE34L --encoder_type TAP --trainfunc proto --global_clf --nSpeaker 3 --save_path ./data/test --batch_size 200 --max_frames 200 --eval_frames 350 --optimizer sgd --lr 0.1 --train_list ./data/train_list.txt --train_path ./data/voxceleb/voxceleb2 --test_list ./data/veri_test.txt --test_path ./data/voxceleb/voxceleb1 --test_interval 5 
 ```
-
-#### Pretrained model
-
-A pretrained model can be downloaded from [here](http://www.robots.ox.ac.uk/~vgg/data/voxceleb/models/baseline_lite_ap.model).
-
-You can check that the following script returns: `EER 2.2322`.
-
+- SAP (Self-attentive pooling):
 ```
-python ./trainSpeakerNet.py --eval --model ResNetSE34L --trainfunc angleproto --save_path data/test --max_frames 300 --test_list /home/joon/voxceleb/test_list.txt --test_path /home/joon/voxceleb/voxceleb1 --initial_model baseline_lite_ap.model
+CUDA_VISIBLE_DEVICES=0 python trainSpeakerNet.py --model ResNetSE34L --encoder_type SAP --trainfunc proto --global_clf --nSpeaker 3 --save_path ./data/test --batch_size 200 --max_frames 200 --eval_frames 350 --optimizer sgd --lr 0.1 --train_list ./data/train_list.txt --train_path ./data/voxceleb/voxceleb2 --test_list ./data/veri_test.txt --test_path ./data/voxceleb/voxceleb1 --test_interval 5 
+```
+- CAP (Cross attentive pooling):
+```
+CUDA_VISIBLE_DEVICES=0 python trainSpeakerNet.py --model ResNetSE34L --encoder_type CAP --trainfunc proto --global_clf --nSpeaker 3 --save_path ./data/test --batch_size 200 --max_frames 200 --eval_frames 350 --optimizer sgd --lr 0.1 --train_list ./data/train_list.txt --train_path ./data/voxceleb/voxceleb2 --test_list ./data/veri_test.txt --test_path ./data/voxceleb/voxceleb1 --test_interval 5 
 ```
 
 #### Implemented models and encoders(aggregations)
@@ -67,9 +65,8 @@ test list for VoxCeleb1 from [here](http://www.robots.ox.ac.uk/~vgg/data/voxcele
 3. The models have been trained with `--max_frames 200` and evaluated with `--max_frames 350`.
 
 4. You can get a good balance between speed and performance using the configuration below.
-
 ```
-python ./trainSpeakerNet.py --model ResNetSE34L --trainfunc angleproto --batch_size 400 --nSpeakers 2 --train_list /home/joon/voxceleb/train_list.txt --test_list /home/joon/voxceleb/test_list.txt --train_path /home/joon/voxceleb/voxceleb2 --test_path /home/joon/voxceleb/voxceleb1
+CUDA_VISIBLE_DEVICES=0 python trainSpeakerNet.py --model ResNetSE34L --encoder_type CAP --trainfunc proto --global_clf --nSpeaker 3 --save_path ./data/test --batch_size 200 --max_frames 200 --eval_frames 350 --optimizer sgd --lr 0.1 --train_list ./data/train_list.txt --train_path ./data/voxceleb/voxceleb2 --test_list ./data/veri_test.txt --test_path ./data/voxceleb/voxceleb1 --test_interval 5 
 ```
 
 #### Citation
@@ -77,11 +74,12 @@ python ./trainSpeakerNet.py --model ResNetSE34L --trainfunc angleproto --batch_s
 Please cite the following if you make use of the code.
 
 ```
-@article{chung2020in,
-  title={In defence of metric learning for speaker recognition},
-  author={Chung, Joon Son and Huh, Jaesung and Mun, Seongkyu and Lee, Minjae and Heo, Hee Soo and Choe, Soyeon and Ham, Chiheon and Jung, Sunghwan and Lee, Bong-Jin and Han, Icksang},
-  journal={arXiv preprint arXiv:2003.11982},
-  year={2020}
+@inproceedings{kye2020cross,
+  title={Cross attentive pooling for speaker verification},
+  author={Kye, Seong Min and Kwon, Yoohwan and Chung, Joon Son},
+  booktitle={2021 IEEE Spoken Language Technology Workshop (SLT)},
+  year={2021},
+  organization={IEEE}
 }
 ```
 
