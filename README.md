@@ -4,6 +4,11 @@ Pytorch code for following paper:
 * **Author** : Seong Min Kye, , Yoohwan Kwon, [Joon Son Chung](https://joonson.com/)
 * **Conference** : IEEE Spoken Language Technology Workshop (SLT), 2021.
 
+#### Abstract
+<img align="middle" width="1000" src="https://github.com/seongmin-kye/CAP/blob/main/overview.png">
+
+The goal of this paper is text-independent speaker verification where utterances come from 'in the wild' videos and may contain irrelevant signal. While speaker verification is naturally a pair-wise problem, existing methods to produce the speaker embeddings are instance-wise. In this paper, we propose Cross Attentive Pooling (CAP) that utilises the context information across the reference-query pair to generate utterance-level embeddings that contain the most discriminative information for the pair-wise matching problem. Experiments are performed on the VoxCeleb dataset in which our method outperforms comparable pooling strategies.
+
 #### Dependencies
 ```
 pip install -r requirements.txt
