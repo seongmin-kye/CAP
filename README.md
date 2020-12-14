@@ -110,3 +110,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
+
+#### Acknowledgments
+This code is based on the implementation of [**VoxCeleb_trainer**](https://github.com/clovaai/voxceleb_trainer). I would like to thank Joon Son Chung for helpful discussions.
