@@ -40,7 +40,7 @@ CUDA_VISIBLE_DEVICES=0 python trainSpeakerNet.py --model ResNetSE34L --encoder_t
 CUDA_VISIBLE_DEVICES=0 python trainSpeakerNet.py --model ResNetSE34L --encoder_type CAP --trainfunc proto --global_clf --nSpeaker 3 --save_path ./data/test --batch_size 200 --max_frames 200 --eval_frames 350 --optimizer sgd --lr 0.1 --train_list ./data/train_list.txt --train_path ./data/voxceleb/voxceleb2 --test_list ./data/veri_test.txt --test_path ./data/voxceleb/voxceleb1 --test_interval 5 
 ```
 
-#### Implemented models and encoders(aggregations)
+#### Implemented models and encoders (aggregations)
 ```
 ResNetSE34 (TAP, SAP, CAP)
 ResNetSE34L (TAP, SAP, CAP)
