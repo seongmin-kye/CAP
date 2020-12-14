@@ -9,47 +9,14 @@ Pytorch code for following paper:
 pip install -r requirements.txt
 ```
 
-#### Running on NSML
-
-```
-nsml run -d vox -d musan_split --cpus 6 -m "exp00000" --gpu-driver-version 396.37 --memory 16G -v -e ./trainSpeakerNet.py -a "--model ResNetSE34 --trainfunc angleproto --nSpeakers 2 --max_frames 200 --batch_size 400"
-```
-
-- Add `--gpu-model V100` to run on V100. Change `-m` to whatever name you want to call your experiment.
-
-- `from nsml import DATASET_PATH` gives dataset paths in `DATASET_PATH[0]`, `DATASET_PATH[1]`, etc.
-
-- `-d vox -d musan_split` argument imports the datasets.
-
-- Data structure inside `DATASET_PATH[0]`  is:
-  - `train/voxceleb1`
-  - `train/voxceleb2`
-  - `train/train_list.txt`
-  - `train/test_list.txt`
-
-- Data structure inside `DATASET_PATH[1]`  is:
-  - `train/music`
-  - `train/noise`
-  - `train/speech`
-
-- If there is only one dataset argument (e.g. `-d vox`) then use `DATASET_PATH` as string instead of `DATASET_PATH[0]`, `DATASET_PATH[1]`, etc.
-
-- To change your code to NSML, you need to change data load path (from `DATASET_PATH`), data save path (relative) and reporting.
-
-- Use `nsml ps -a` to see all of your experiments.
-
-- Download results to local `nsml download KRXXXXX/vox/XXX /save/to/here -f -s /app/exps`. `/app` is the home directory of the experiment.
-
-See `cnsmlgpu013::R/home1/irteam/db/musan_split` for more details on its inner structure. Length of each segment is 5 seconds.
-
 #### Data preparation
 
 The following script can be used to download and prepare the VoxCeleb dataset for training.
 
 ```
-python ./dataprep.py --save_path /home/joon/voxceleb --download --user USERNAME --password PASSWORD 
-python ./dataprep.py --save_path /home/joon/voxceleb --extract
-python ./dataprep.py --save_path /home/joon/voxceleb --convert
+python ./dataprep.py --save_path ./data --download --user USERNAME --password PASSWORD 
+python ./dataprep.py --save_path ./data --extract
+python ./dataprep.py --save_path ./data --convert
 ```
 
 In addition to the Python dependencies, `wget` and `ffmpeg` must be installed on the system.
@@ -57,7 +24,7 @@ In addition to the Python dependencies, `wget` and `ffmpeg` must be installed on
 #### Training example
 
 ```
-python ./trainSpeakerNet.py --model ResNetSE34 --encoder SAP --trainfunc amsoftmax --optimizer adam --save_path data/exp1 --batch_size 200 --max_frames 200 --scale 30 --margin 0.3 --train_list /home/joon/voxceleb/train_list.txt --test_list /home/joon/voxceleb/test_list.txt --train_path /home/joon/voxceleb/voxceleb2 --test_path /home/joon/voxceleb/voxceleb1
+python ./trainSpeakerNet.py --model ResNetSE34L --encoder CAP --trainfunc proto --optimizer adam --save_path data/exp1 --batch_size 200 --max_frames 200 --scale 30 --margin 0.3 --train_list /home/joon/voxceleb/train_list.txt --test_list /home/joon/voxceleb/test_list.txt --train_path /home/joon/voxceleb/voxceleb2 --test_path /home/joon/voxceleb/voxceleb1
 ```
 
 #### Pretrained model
@@ -70,23 +37,10 @@ You can check that the following script returns: `EER 2.2322`.
 python ./trainSpeakerNet.py --eval --model ResNetSE34L --trainfunc angleproto --save_path data/test --max_frames 300 --test_list /home/joon/voxceleb/test_list.txt --test_path /home/joon/voxceleb/voxceleb1 --initial_model baseline_lite_ap.model
 ```
 
-#### Implemented loss functions
+#### Implemented models and encoders(aggregations)
 ```
-Softmax (softmax)
-AM-Softmax (amsoftmax)
-AAM-Softmax (aamsoftmax)
-GE2E (ge2e)
-Prototypical (proto)
-Triplet (triplet)
-Contrastive (contrastive)
-Angular Prototypical (angleproto)
-```
-
-#### Implemented models and encoders
-```
-ResNetSE34 (SAP)
-ResNetSE34L (SAP)
-VGGVox40 (SAP, TAP, MAX)
+ResNetSE34 (TAP, SAP, CAP)
+ResNetSE34L (TAP, SAP, CAP)
 ```
 
 #### Data
@@ -105,13 +59,12 @@ test list for VoxCeleb1 from [here](http://www.robots.ox.ac.uk/~vgg/data/voxcele
 #### Replicating the results from the paper
 
 1. Model definitions
-  - `VGG-M-40` in the paper is `VGGVox` in the code.
   - `Thin ResNet-34` is in the paper `ResNetSE34` in the code.
   - `Fast ResNet-34` is in the paper `ResNetSE34L` in the code.
 
-2. For metric learning objectives, the batch size in the paper is `nSpeakers` multiplied by `batch_size` in the code. For the batch size of 800 in the paper, use `--nSpeakers 2 --batch_size 400`, `--nSpeakers 3 --batch_size 266`, etc.
+2. For metric learning objectives, the batch size in the paper is `nSpeakers` multiplied by `batch_size` in the code. For the batch size of 600 in the paper, use `--nSpeakers 3 --batch_size 200`, `--nSpeakers 2 --batch_size 300`, etc.
 
-3. The models have been trained with `--max_frames 200` and evaluated with `--max_frames 400`.
+3. The models have been trained with `--max_frames 200` and evaluated with `--max_frames 350`.
 
 4. You can get a good balance between speed and performance using the configuration below.
 
