@@ -87,7 +87,14 @@ Please cite the following if you make use of the code.
   organization={IEEE}
 }
 ```
-
+```
+@inproceedings{kye2020meta,
+  title={Meta-Learning for Short Utterance Speaker Recognition with Imbalance Length Pairs},
+  author={Kye, Seong Min and Jung, Youngmoon and Lee, Hae Beom and Hwang, Sung Ju and Kim, Hoirin},
+  booktitle={Interspeech},
+  year={2020}
+}
+```
 #### License
 ```
 Copyright (c) 2020-present NAVER Corp.
