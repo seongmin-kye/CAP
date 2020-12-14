@@ -62,8 +62,8 @@ test list for VoxCeleb1 from [here](http://www.robots.ox.ac.uk/~vgg/data/voxcele
 #### Replicating the results from the paper
 
 1. Model definitions
-  - `Thin ResNet-34` is in [the paper](https://arxiv.org/pdf/2003.11982.pdf) `ResNetSE34` in the code.
-  - `Fast ResNet-34` is in [the paper](https://arxiv.org/pdf/2003.11982.pdf) `ResNetSE34L` in the code.
+  - `Thin ResNet-34` is in the [paper](https://arxiv.org/pdf/2003.11982.pdf) `ResNetSE34` in the code.
+  - `Fast ResNet-34` is in the [paper](https://arxiv.org/pdf/2003.11982.pdf) `ResNetSE34L` in the code.
 
 2. For metric learning objectives, the batch size in the paper is `nSpeakers` multiplied by `batch_size` in the code. For the batch size of 600 in the paper, use `--nSpeakers 3 --batch_size 200`, `--nSpeakers 2 --batch_size 300`, etc.
 
